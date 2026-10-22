@@ -2,13 +2,21 @@ package com.rwtema.monkmod;
 
 import com.rwtema.monkmod.abilities.MonkAbilityArmor;
 import com.rwtema.monkmod.abilities.MonkAbilityArmorToughness;
+import com.rwtema.monkmod.abilities.MonkAbilityBlink;
+import com.rwtema.monkmod.abilities.MonkAbilityFeatherFalling;
 import com.rwtema.monkmod.abilities.MonkAbilityFly;
+import com.rwtema.monkmod.abilities.MonkAbilityGlassTouch;
 import com.rwtema.monkmod.abilities.MonkAbilityHealth;
+import com.rwtema.monkmod.abilities.MonkAbilityHunger;
 import com.rwtema.monkmod.abilities.MonkAbilityJump;
 import com.rwtema.monkmod.abilities.MonkAbilityProtection;
 import com.rwtema.monkmod.abilities.MonkAbilitySpeed;
+import com.rwtema.monkmod.abilities.MonkAbilityStepUp;
 import com.rwtema.monkmod.abilities.MonkAbilityStrength;
+import com.rwtema.monkmod.abilities.MonkAbilityTameAnimals;
+import com.rwtema.monkmod.abilities.MonkAbilityWalkOnWater;
 import com.rwtema.monkmod.abilities.MonkAbilityWaterBreathing;
+import com.rwtema.monkmod.abilities.MonkAbilityWitheringStare;
 import com.rwtema.monkmod.item.MonkItem;
 import com.rwtema.monkmod.levels.MonkLevelManager;
 import net.minecraft.world.item.Item;
@@ -42,12 +50,21 @@ public class MonkMod {
     public static final MonkAbilityWaterBreathing WATER_BREATHING = new MonkAbilityWaterBreathing();
     public static final MonkAbilityProtection PROTECTION = new MonkAbilityProtection();
     public static final MonkAbilityFly FLY = new MonkAbilityFly();
+    public static final MonkAbilityBlink BLINK = new MonkAbilityBlink();
+    public static final MonkAbilityFeatherFalling FEATHER_FALLING = new MonkAbilityFeatherFalling();
+    public static final MonkAbilityStepUp STEP_UP = new MonkAbilityStepUp();
+    public static final MonkAbilityWalkOnWater WALK_ON_WATER = new MonkAbilityWalkOnWater();
+    public static final MonkAbilityGlassTouch GLASS_TOUCH = new MonkAbilityGlassTouch();
+    public static final MonkAbilityHunger HUNGER = new MonkAbilityHunger();
+    public static final MonkAbilityTameAnimals TAME_ANIMALS = new MonkAbilityTameAnimals();
+    public static final MonkAbilityWitheringStare WITHERING_STARE = new MonkAbilityWitheringStare();
 
     public MonkMod() {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
         ITEMS.register(modBus);
 
         MonkLevelManager.initializeDefaultLevels();
+
         MonkLevelManager.register(1, SPEED);
         MonkLevelManager.register(1, JUMP);
         MonkLevelManager.register(2, HEALTH);
@@ -57,6 +74,14 @@ public class MonkMod {
         MonkLevelManager.register(6, WATER_BREATHING);
         MonkLevelManager.register(8, PROTECTION);
         MonkLevelManager.register(10, FLY);
+        MonkLevelManager.register(11, FEATHER_FALLING);
+        MonkLevelManager.register(12, BLINK);
+        MonkLevelManager.register(13, WALK_ON_WATER);
+        MonkLevelManager.register(14, STEP_UP);
+        MonkLevelManager.register(15, GLASS_TOUCH);
+        MonkLevelManager.register(16, HUNGER);
+        MonkLevelManager.register(17, TAME_ANIMALS);
+        MonkLevelManager.register(18, WITHERING_STARE);
 
         MinecraftForge.EVENT_BUS.register(new MonkCommand());
         MinecraftForge.EVENT_BUS.register(MonkManager.class);
