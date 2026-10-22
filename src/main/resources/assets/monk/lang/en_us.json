@@ -1,0 +1,25 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="All Rights Reserved"
+
+[[mods]]
+modId="monk"
+version="${version}"
+displayName="Monk Mod"
+description="A Forge 1.20.1 port scaffold for the Monk Mod experience."
+authors="rwtema / ported by Copilot"
+logoFile="monk_logo.png"
+
+[[dependencies.monk]]
+modId="forge"
+mandatory=true
+versionRange="[47.3.0,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.monk]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.20.1]"
+ordering="NONE"
+side="BOTH"
