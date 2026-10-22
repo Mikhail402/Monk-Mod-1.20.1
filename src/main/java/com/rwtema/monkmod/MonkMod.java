@@ -2,9 +2,15 @@ package com.rwtema.monkmod;
 
 import com.rwtema.monkmod.abilities.MonkAbilityArmor;
 import com.rwtema.monkmod.abilities.MonkAbilityArmorToughness;
+import com.rwtema.monkmod.abilities.MonkAbilityBlindness;
 import com.rwtema.monkmod.abilities.MonkAbilityBlink;
+import com.rwtema.monkmod.abilities.MonkAbilityCatchArrows;
+import com.rwtema.monkmod.abilities.MonkAbilityCreeperKiss;
+import com.rwtema.monkmod.abilities.MonkAbilityExplosionProof;
 import com.rwtema.monkmod.abilities.MonkAbilityFeatherFalling;
+import com.rwtema.monkmod.abilities.MonkAbilityFireResistance;
 import com.rwtema.monkmod.abilities.MonkAbilityFly;
+import com.rwtema.monkmod.abilities.MonkAbilityFullWaterBreathing;
 import com.rwtema.monkmod.abilities.MonkAbilityGlassTouch;
 import com.rwtema.monkmod.abilities.MonkAbilityHealth;
 import com.rwtema.monkmod.abilities.MonkAbilityHunger;
@@ -48,7 +54,10 @@ public class MonkMod {
     public static final MonkAbilityArmorToughness ARMOR_TOUGHNESS = new MonkAbilityArmorToughness(1.0D);
     public static final MonkAbilityStrength STRENGTH = new MonkAbilityStrength();
     public static final MonkAbilityWaterBreathing WATER_BREATHING = new MonkAbilityWaterBreathing();
+    public static final MonkAbilityFullWaterBreathing FULL_WATER_BREATHING = new MonkAbilityFullWaterBreathing();
     public static final MonkAbilityProtection PROTECTION = new MonkAbilityProtection();
+    public static final MonkAbilityExplosionProof EXPLOSION_PROOF = new MonkAbilityExplosionProof();
+    public static final MonkAbilityFireResistance FIRE_RESISTANCE = new MonkAbilityFireResistance();
     public static final MonkAbilityFly FLY = new MonkAbilityFly();
     public static final MonkAbilityBlink BLINK = new MonkAbilityBlink();
     public static final MonkAbilityFeatherFalling FEATHER_FALLING = new MonkAbilityFeatherFalling();
@@ -57,6 +66,9 @@ public class MonkMod {
     public static final MonkAbilityGlassTouch GLASS_TOUCH = new MonkAbilityGlassTouch();
     public static final MonkAbilityHunger HUNGER = new MonkAbilityHunger();
     public static final MonkAbilityTameAnimals TAME_ANIMALS = new MonkAbilityTameAnimals();
+    public static final MonkAbilityCatchArrows CATCH_ARROWS = new MonkAbilityCatchArrows();
+    public static final MonkAbilityCreeperKiss CREEPER_KISS = new MonkAbilityCreeperKiss();
+    public static final MonkAbilityBlindness BLINDNESS = new MonkAbilityBlindness();
     public static final MonkAbilityWitheringStare WITHERING_STARE = new MonkAbilityWitheringStare();
 
     public MonkMod() {
@@ -72,7 +84,9 @@ public class MonkMod {
         MonkLevelManager.register(4, ARMOR_TOUGHNESS);
         MonkLevelManager.register(5, STRENGTH);
         MonkLevelManager.register(6, WATER_BREATHING);
+        MonkLevelManager.register(7, FULL_WATER_BREATHING);
         MonkLevelManager.register(8, PROTECTION);
+        MonkLevelManager.register(9, FIRE_RESISTANCE);
         MonkLevelManager.register(10, FLY);
         MonkLevelManager.register(11, FEATHER_FALLING);
         MonkLevelManager.register(12, BLINK);
@@ -81,7 +95,11 @@ public class MonkMod {
         MonkLevelManager.register(15, GLASS_TOUCH);
         MonkLevelManager.register(16, HUNGER);
         MonkLevelManager.register(17, TAME_ANIMALS);
-        MonkLevelManager.register(18, WITHERING_STARE);
+        MonkLevelManager.register(18, CATCH_ARROWS);
+        MonkLevelManager.register(19, CREEPER_KISS);
+        MonkLevelManager.register(20, BLINDNESS);
+        MonkLevelManager.register(20, WITHERING_STARE);
+        MonkLevelManager.register(20, EXPLOSION_PROOF);
 
         MinecraftForge.EVENT_BUS.register(new MonkCommand());
         MinecraftForge.EVENT_BUS.register(MonkManager.class);

@@ -4,9 +4,15 @@ import com.rwtema.monkmod.MonkMod;
 import com.rwtema.monkmod.abilities.MonkAbility;
 import com.rwtema.monkmod.abilities.MonkAbilityArmor;
 import com.rwtema.monkmod.abilities.MonkAbilityArmorToughness;
+import com.rwtema.monkmod.abilities.MonkAbilityBlindness;
 import com.rwtema.monkmod.abilities.MonkAbilityBlink;
+import com.rwtema.monkmod.abilities.MonkAbilityCatchArrows;
+import com.rwtema.monkmod.abilities.MonkAbilityCreeperKiss;
+import com.rwtema.monkmod.abilities.MonkAbilityExplosionProof;
 import com.rwtema.monkmod.abilities.MonkAbilityFeatherFalling;
+import com.rwtema.monkmod.abilities.MonkAbilityFireResistance;
 import com.rwtema.monkmod.abilities.MonkAbilityFly;
+import com.rwtema.monkmod.abilities.MonkAbilityFullWaterBreathing;
 import com.rwtema.monkmod.abilities.MonkAbilityGlassTouch;
 import com.rwtema.monkmod.abilities.MonkAbilityHealth;
 import com.rwtema.monkmod.abilities.MonkAbilityHunger;
@@ -49,7 +55,9 @@ public final class MonkLevelManager {
         register(4, new MonkAbilityArmorToughness(1.0D));
         register(5, new MonkAbilityStrength());
         register(6, new MonkAbilityWaterBreathing());
+        register(7, new MonkAbilityFullWaterBreathing());
         register(8, new MonkAbilityProtection());
+        register(9, new MonkAbilityFireResistance());
         register(10, new MonkAbilityFly());
         register(11, new MonkAbilityFeatherFalling());
         register(12, new MonkAbilityBlink());
@@ -58,7 +66,11 @@ public final class MonkLevelManager {
         register(15, new MonkAbilityGlassTouch());
         register(16, new MonkAbilityHunger());
         register(17, new MonkAbilityTameAnimals());
-        register(18, new MonkAbilityWitheringStare());
+        register(18, new MonkAbilityCatchArrows());
+        register(19, new MonkAbilityCreeperKiss());
+        register(20, new MonkAbilityBlindness());
+        register(20, new MonkAbilityWitheringStare());
+        register(20, new MonkAbilityExplosionProof());
     }
 
     public static int getProgressForNextLevel(int currentLevel) {
