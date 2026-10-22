@@ -1,60 +1,37 @@
-package com.rwtema.monkmod;
+package com.rwtema.monkmod.item;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import com.rwtema.monkmod.MonkManager;
+import com.rwtema.monkmod.MonkNetwork;
+import com.rwtema.monkmod.data.MonkData;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.util.LogicalSidedProvider;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
-import java.util.function.Supplier;
-
-public final class MonkNetwork {
-    private static final String PROTOCOL_VERSION = "1";
-    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(MonkMod.MODID, "network"),
-            () -> PROTOCOL_VERSION,
-            PROTOCOL_VERSION::equals,
-            PROTOCOL_VERSION::equals
-    );
-
-    private MonkNetwork() {}
-
-    public static void register() {
-        int index = 0;
-        CHANNEL.registerMessage(index++, SyncMonkDataMessage.class, SyncMonkDataMessage::encode, SyncMonkDataMessage::decode, SyncMonkDataMessage::handle);
+public class MonkItem extends Item {
+    public MonkItem() {
+        super(new Item.Properties());
     }
 
-    public static void sendToPlayer(ServerPlayer player, SyncMonkDataMessage message) {
-        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), message);
-    }
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
 
-    public record SyncMonkDataMessage(int level, int progress) {
-        public static void encode(SyncMonkDataMessage message, FriendlyByteBuf buffer) {
-            buffer.writeVarInt(message.level);
-            buffer.writeVarInt(message.progress);
+        if (level.isClientSide) {
+            return InteractionResultHolder.succeed(stack);
         }
 
-        public static SyncMonkDataMessage decode(FriendlyByteBuf buffer) {
-            return new SyncMonkDataMessage(buffer.readVarInt(), buffer.readVarInt());
+        if (player instanceof ServerPlayer serverPlayer) {
+            MonkData data = MonkManager.get(player);
+            data.setLevel(data.getLevel() + 1);
+            data.setProgress(0);
+            MonkNetwork.sendToPlayer(serverPlayer,
+                    new MonkNetwork.SyncMonkDataMessage(data.getLevel(), data.getProgress()));
         }
 
-        public static void handle(SyncMonkDataMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-            NetworkEvent.Context context = contextSupplier.get();
-            context.enqueueWork(() -> {
-                Player player = LogicalSidedProvider.CLIENTWORLD.get().getPlayer();
-                if (player != null) {
-                    var data = MonkManager.get(player);
-                    data.setLevel(message.level);
-                    data.setProgress(message.progress);
-                }
-            });
-            context.setPacketHandled(true);
-        }
+        return InteractionResultHolder.succeed(stack);
     }
 }

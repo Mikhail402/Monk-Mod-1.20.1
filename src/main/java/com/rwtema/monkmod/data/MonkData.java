@@ -1,61 +1,54 @@
-package com.rwtema.monkmod;
+package com.rwtema.monkmod.data;
 
-import com.rwtema.monkmod.data.MonkData;
-import com.rwtema.monkmod.data.MonkDataProvider;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraft.nbt.CompoundTag;
 
-public final class MonkManager {
-    private MonkManager() {}
+public class MonkData {
+    private int level;
+    private int progress;
+    private boolean dirty;
 
-    @SubscribeEvent
-    public static void attachCapabilities(AttachCapabilitiesEvent<Entity> event) {
-        if (event.getObject() instanceof Player) {
-            event.addCapability(new ResourceLocation(MonkMod.MODID, "monk_data"), new MonkDataProvider());
-        }
+    public int getLevel() {
+        return level;
     }
 
-    @SubscribeEvent
-    public static void onPlayerClone(PlayerEvent.Clone event) {
-        MonkData original = get(event.getOriginal());
-        MonkData clone = get(event.getEntity());
-        clone.copyFrom(original);
-        if (event.getEntity() instanceof ServerPlayer serverPlayer) {
-            MonkNetwork.sendToPlayer(serverPlayer, new MonkNetwork.SyncMonkDataMessage(clone.getLevel(), clone.getProgress()));
-        }
+    public void setLevel(int level) {
+        this.level = Math.max(0, level);
+        this.dirty = true;
     }
 
-    @SubscribeEvent
-    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-        Player player = event.getEntity();
-        MonkData data = get(player);
-        MonkNetwork.sendToPlayer((ServerPlayer) player, new MonkNetwork.SyncMonkDataMessage(data.getLevel(), data.getProgress()));
+    public int getProgress() {
+        return progress;
     }
 
-    @SubscribeEvent
-    public static void onLivingTick(LivingEvent.LivingTickEvent event) {
-        if (event.getEntity().level().isClientSide) {
-            return;
-        }
-
-        if (event.getEntity() instanceof Player player) {
-            MonkData data = get(player);
-            if (data.isDirty()) {
-                MonkNetwork.sendToPlayer((ServerPlayer) player, new MonkNetwork.SyncMonkDataMessage(data.getLevel(), data.getProgress()));
-                data.clearDirty();
-            }
-        }
+    public void setProgress(int progress) {
+        this.progress = Math.max(0, progress);
+        this.dirty = true;
     }
 
-    public static MonkData get(Player player) {
-        LazyOptional<MonkData> capability = player.getCapability(MonkDataProvider.MONK_DATA_CAPABILITY);
-        return capability.orElseGet(MonkData::new);
+    public boolean isDirty() {
+        return dirty;
+    }
+
+    public void clearDirty() {
+        this.dirty = false;
+    }
+
+    public void copyFrom(MonkData other) {
+        this.level = other.level;
+        this.progress = other.progress;
+        this.dirty = true;
+    }
+
+    public CompoundTag save() {
+        CompoundTag tag = new CompoundTag();
+        tag.putInt("level", level);
+        tag.putInt("progress", progress);
+        return tag;
+    }
+
+    public void load(CompoundTag tag) {
+        this.level = tag.getInt("level");
+        this.progress = tag.getInt("progress");
+        this.dirty = true;
     }
 }
