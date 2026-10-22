@@ -1,7 +1,11 @@
 package com.rwtema.monkmod;
 
+import com.rwtema.monkmod.abilities.MonkAbility;
+import com.rwtema.monkmod.abilities.MonkAbilityJump;
+import com.rwtema.monkmod.abilities.MonkAbilitySpeed;
 import com.rwtema.monkmod.data.MonkData;
 import com.rwtema.monkmod.data.MonkDataProvider;
+import com.rwtema.monkmod.levels.MonkLevelManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -55,11 +59,19 @@ public final class MonkManager {
                 }
                 data.clearDirty();
             }
+
+            for (MonkAbility ability : MonkLevelManager.getAbilities(data.getLevel())) {
+                ability.tickServer(player);
+            }
         }
     }
 
     public static MonkData get(Player player) {
         LazyOptional<MonkData> capability = player.getCapability(MonkDataProvider.MONK_DATA_CAPABILITY);
         return capability.orElseGet(MonkData::new);
+    }
+
+    public static boolean getAbilityLevel(Player player, MonkAbility ability) {
+        return MonkLevelManager.getAbilities(get(player).getLevel()).contains(ability);
     }
 }
