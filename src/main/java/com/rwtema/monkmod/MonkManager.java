@@ -1,17 +1,20 @@
 package com.rwtema.monkmod;
 
-import com.rwtema.monkmod.abilities.MonkAbility;
-import com.rwtema.monkmod.abilities.MonkAbilityJump;
-import com.rwtema.monkmod.abilities.MonkAbilitySpeed;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.context.CommandContext;
 import com.rwtema.monkmod.data.MonkData;
 import com.rwtema.monkmod.data.MonkDataProvider;
-import com.rwtema.monkmod.levels.MonkLevelManager;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -59,10 +62,6 @@ public final class MonkManager {
                 }
                 data.clearDirty();
             }
-
-            for (MonkAbility ability : MonkLevelManager.getAbilities(data.getLevel())) {
-                ability.tickServer(player);
-            }
         }
     }
 
@@ -71,7 +70,18 @@ public final class MonkManager {
         return capability.orElseGet(MonkData::new);
     }
 
-    public static boolean getAbilityLevel(Player player, MonkAbility ability) {
-        return MonkLevelManager.getAbilities(get(player).getLevel()).contains(ability);
+    public static void grantProgress(Player player, int value) {
+        MonkData data = get(player);
+        data.setLevel(Math.max(1, Math.min(20, data.getLevel())));
+        data.setProgress(Math.max(0, data.getProgress() + value));
+    }
+
+    public static void setLevel(Player player, int value) {
+        MonkData data = get(player);
+        data.setLevel(Math.max(1, Math.min(20, value)));
+    }
+
+    public static int getLevel(Player player) {
+        return get(player).getLevel();
     }
 }

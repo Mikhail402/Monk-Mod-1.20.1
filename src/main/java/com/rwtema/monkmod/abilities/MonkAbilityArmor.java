@@ -5,12 +5,14 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 
 public class MonkAbilityArmor extends MonkAbilityAttribute {
+    private final double toughness;
+    private final double multiplier;
+
     public MonkAbilityArmor(double armorBonus, double toughnessBonus) {
         super("armor", Attributes.ARMOR, armorBonus, AttributeModifier.Operation.ADDITION);
         this.toughness = toughnessBonus;
+        this.multiplier = armorBonus;
     }
-
-    private final double toughness;
 
     @Override
     public boolean canApply(Player player) {
@@ -25,6 +27,4 @@ public class MonkAbilityArmor extends MonkAbilityAttribute {
     public double getToughness(Player player) {
         return toughness;
     }
-
-    private final double multiplier;
 }
